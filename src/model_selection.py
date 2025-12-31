@@ -36,6 +36,9 @@ def cross_validate(dataframe, model, target_col, k_folds=5, metric=None, shuffle
         
         if isinstance(model, type):
             fold_model = model(**model_kwargs)
+        elif callable(model):
+            # Handle callable functions like get_xgboost_classifier
+            fold_model = model(**model_kwargs)
         else:
             try:
                 fold_model = sklearn_clone(model)
@@ -61,6 +64,9 @@ def cross_validate(dataframe, model, target_col, k_folds=5, metric=None, shuffle
     
     if isinstance(model, type):
         best_model = model(**model_kwargs)
+    elif callable(model):
+        # Handle callable functions like get_xgboost_classifier
+        best_model = model(**model_kwargs)
     else:
         try:
             best_model = sklearn_clone(model)
@@ -76,7 +82,17 @@ def cross_validate(dataframe, model, target_col, k_folds=5, metric=None, shuffle
 
 def grid_search_cv(model, X, y, param_grid, cv=5, scoring=None, **kwargs):
     """Wrapper around sklearn's GridSearchCV for hyperparameter tuning."""
-    grid_search = GridSearchCV(estimator=model(), param_grid=param_grid, cv=cv, scoring=scoring, **kwargs)
+    # GridSearchCV accepts: n_jobs, refit, verbose, pre_dispatch, error_score, return_train_score
+    # Other parameters like random_state, eval_metric should go to the estimator
+    gridsearch_params = ['n_jobs', 'refit', 'verbose', 'pre_dispatch', 'error_score', 'return_train_score']
+    estimator_kwargs = {k: v for k, v in kwargs.items() if k not in gridsearch_params}
+    gridsearch_kwargs = {k: v for k, v in kwargs.items() if k in gridsearch_params}
+    
+    # Create base estimator with estimator-specific kwargs
+    base_estimator = model(**estimator_kwargs)
+    
+    # Create GridSearchCV with only valid parameters
+    grid_search = GridSearchCV(estimator=base_estimator, param_grid=param_grid, cv=cv, scoring=scoring, **gridsearch_kwargs)
     grid_search.fit(X, y)
     return grid_search
 
