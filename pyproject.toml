@@ -1,0 +1,15 @@
+[project]
+name = "ml-workflow-playground"
+version = "0.1.0"
+description = "ML workflow utilities with custom implementations for models, metrics, and cross-validation"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=1.24.0",
+    "pandas>=2.0.0",
+    "scikit-learn>=1.3.0",
+    "matplotlib>=3.7.0",
+    "xgboost>=2.0.0",
+    "seaborn>=0.12.0",
+    "ipykernel>=7.1.0",
+]
