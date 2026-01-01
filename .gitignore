@@ -17,6 +17,9 @@ uv.lock
 
 # Project specific
 main.py
+trained_models/
+*.joblib
+*.pkl
 
 # IDE
 .vscode/
