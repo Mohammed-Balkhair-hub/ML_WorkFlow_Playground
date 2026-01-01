@@ -56,6 +56,7 @@ See `notebooks/` for complete examples:
 - **exam-score-playground.ipynb**: Regression task with Linear Regression
 - **penguins-playground.ipynb**: Classification with XGBoost (species prediction)
 - **titanic-playground.ipynb**: Classification with Logistic Regression & Random Forest (survival prediction)
+- **breast_cancer_playground.ipynb**: Classification with cross-validation, grid search, and model persistence
 
 ## Notes
 
